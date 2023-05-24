@@ -1,5 +1,7 @@
+// import 'dart:html';
+import './util/global_variables.dart';
 import 'package:calculator/util/dimensions.dart';
-import 'package:calculator/widgets/circular_avatar.dart';
+// import 'package:calculator/widgets/circular_avatar.dart';
 import 'package:calculator/widgets/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return const GetMaterialApp(
       home: Homepage(),
       debugShowCheckedModeBanner: false,
     );
@@ -34,14 +36,10 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  double firstnum = 0.0;
-  double secondnum = 0.0;
-  var input = "";
-  var output = "";
-  var operation = "";
 
   @override
   Widget build(BuildContext context) {
+    //Button Function tells what if <,= and AC pressed
     onButtonclick(value) {
       if (value == "AC") {
         input = '';
@@ -52,17 +50,31 @@ class _HomepageState extends State<Homepage> {
         }
       } else if (value == "=") {
         if (input.isNotEmpty) {
+          //Algorithm that tells .....
+          //userinput the input that is inserted by user is here
           var userinput = input;
+          //we need to replace x with * beacuse math expression multiplication sign is * not the x
           userinput = userinput.replaceAll("x", "*");
-          Parser p = Parser();
-          Expression expression = p.parse(userinput);
-          ContextModel cm = ContextModel();
-          var finalvalue = expression.evaluate(EvaluationType.REAL, cm);
-          output = finalvalue.toString();
-          if (output.endsWith(".0")) {
-            output = output.substring(0, output.length - 2);
+
+          //tryinitialize the parser to read !
+          try {
+            Parser p = Parser();
+            //now parse the user input using expression
+            Expression expression = p.parse(userinput);
+            ContextModel cm = ContextModel();
+            //getting the final value
+            var finalvalue = expression.evaluate(EvaluationType.REAL, cm);
+            //Converting output to string because output store string
+            output = finalvalue.toString();
+            //if the output end with .0 then its length should be cut off using -2
+            if (output.endsWith(".0")) {
+              output = output.substring(0, output.length - 2);
+            }
+          } catch (e) {
+            output = "";
           }
         }
+        //this show input is will ultimately became output so that user c an edit the result
         input = output;
       } else {
         input = input + value;
@@ -77,6 +89,8 @@ class _HomepageState extends State<Homepage> {
 // expression e = p.parse(userinput);
 // context model cm= context mode();
 // final value - expression.evalutate (Evaltueteot.real, cm)
+
+//button method for each button
     Widget button(
         {backgroundcolor = buttoncolor, textcolor = Colors.white, digit}) {
       return Expanded(
@@ -84,11 +98,11 @@ class _HomepageState extends State<Homepage> {
           child: Container(
         // width: double.infinity,
         margin: EdgeInsets.symmetric(
-            horizontal: Dimension.height10, vertical: Dimension.height30 / 1.7),
+            horizontal: Dimension.height10, vertical: Dimension.height30 / 7),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 5,
-              padding: EdgeInsets.all(Dimension.height20 * 1.2),
+              padding: EdgeInsets.all(Dimension.height20 * 1),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(Dimension.height10)),
               backgroundColor: backgroundcolor),
@@ -98,7 +112,7 @@ class _HomepageState extends State<Homepage> {
             style: TextStyle(
                 fontSize: Dimension.font20,
                 color: textcolor,
-                fontWeight: FontWeight.bold),
+                fontWeight: FontWeight.w800),
           ),
         ),
       ));
@@ -108,57 +122,65 @@ class _HomepageState extends State<Homepage> {
         backgroundColor: Colors.black,
         body: Column(
           children: [
+            //input output section
             Expanded(
                 flex: 3,
-                child: Container(
-                  // height: Dimension.height20,
-                  // height: 200,x
-                  width: double.maxFinite,
-                  padding: EdgeInsets.all(Dimension.height10),
-                  color: Colors.black54,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        input,
-                        style: TextStyle(
-                            fontSize: Dimension.font24 * 2,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      SizedBox(
-                        height: Dimension.height10,
-                      ),
-                      Text(
-                        output,
-                        style: TextStyle(
-                            fontSize: Dimension.font20 * 2,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white.withOpacity(0.7)),
-                      ),
-                      SizedBox(
-                        height: Dimension.height10,
-                      ),
-                    ],
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(top: Dimension.height45),
+                  scrollDirection: Axis.vertical,
+                  reverse: true,
+                  // physics:AlwaysScrollableScrollPhysics(),
+                  // restorationId:AutofillHints.addressCity,
+                  // keyboardDismissBehavior:ScrollViewKeyboardDismissBehavior.manual,
+                  child: Container(
+                    margin: EdgeInsets.only(top: Dimension.height45 * 4),
+                    // height: Dimension.height20,
+                    // height: 200,x
+                    width: double.maxFinite,
+                    padding: EdgeInsets.all(Dimension.height10),
+
+                    color: Colors.black54,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          input,
+                          style: TextStyle(
+                              fontSize: Dimension.font24 * 2,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        SizedBox(
+                          height: Dimension.height10,
+                        ),
+                        Text(
+                          output,
+                          style: TextStyle(
+                              fontSize: Dimension.font20 * 2,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white.withOpacity(0.7)),
+                        ),
+                        SizedBox(
+                          height: Dimension.height10,
+                        ),
+                      ],
+                    ),
                   ),
                 )),
+            //butttons section
             Expanded(
               flex: 4,
               child: Container(
-                decoration:  BoxDecoration(
-                  
-                    border: Border.symmetric(
-                      
-                        horizontal: BorderSide(color: Colors.white.withOpacity(0.7), width: 1, style: BorderStyle.solid),
-                        
-                        vertical: BorderSide.none,
-                        
-                        ),
-                        
-
-),
-                        
+                decoration: BoxDecoration(
+                  border: Border.symmetric(
+                    horizontal: BorderSide(
+                        color: Colors.white.withOpacity(0.7),
+                        width: 1,
+                        style: BorderStyle.solid),
+                    vertical: BorderSide.none,
+                  ),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -179,6 +201,9 @@ class _HomepageState extends State<Homepage> {
                             textcolor: orangecolor),
                       ],
                     ),
+                    SizedBox(
+                      height: Dimension.height10 * 1.5,
+                    ),
                     Row(
                       children: [
                         button(digit: "7"),
@@ -189,6 +214,9 @@ class _HomepageState extends State<Homepage> {
                             backgroundcolor: operatorcolor,
                             textcolor: orangecolor),
                       ],
+                    ),
+                    SizedBox(
+                      height: Dimension.height10 * 1.5,
                     ),
                     Row(
                       children: [
@@ -201,6 +229,9 @@ class _HomepageState extends State<Homepage> {
                             textcolor: orangecolor),
                       ],
                     ),
+                    SizedBox(
+                      height: Dimension.height10 * 1.5,
+                    ),
                     Row(
                       children: [
                         button(digit: "1"),
@@ -211,6 +242,9 @@ class _HomepageState extends State<Homepage> {
                             backgroundcolor: operatorcolor,
                             textcolor: orangecolor),
                       ],
+                    ),
+                    SizedBox(
+                      height: Dimension.height10 * 1.5,
                     ),
                     Row(
                       children: [
