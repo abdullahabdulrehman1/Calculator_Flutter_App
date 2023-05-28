@@ -10,17 +10,7 @@ Use the table of contents icon  on the top left corner of this document to get t
 New contributor guide
 To get an overview of the project, read the README. Here are some resources to help you get started with open source contributions:
 
-Finding ways to contribute to open source on GitHub
-Set up Git
-GitHub flow
-Collaborating with pull requests
-Getting started
-To navigate our codebase with confidence, see the introduction to working in the docs repository 🎊. For more information on how we write our markdown files, see the GitHub Markdown reference.
-
-Check to see what types of contributions we accept before making changes. Some of them don't even require writing a single line of code ✨.
-
-Issues
-Create a new issue
+UPDATED THIS
 If you spot a problem with the docs, search if an issue already exists. If a related issue doesn't exist, you can open a new issue using a relevant issue form.
 
 Solve an issue
